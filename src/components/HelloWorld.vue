@@ -9,7 +9,7 @@
             :class="{ 'active':(isSeen)  }">
             <img v-bind:src="item.icon"  alt=""> 
             <p>{{item.message}}</p>
-            <p @click="getDate()" >{{getDate}}</p>
+            <p>{{getDate}}</p>
          </div>
 
    </div>
@@ -37,7 +37,7 @@ export default {
     
 	},
 	mounted() {
-		axios.get('https://api.myjson.com/bins/19wyhe')
+		axios.get('http://api.myjson.com/bins/19wyhe')
 			.then(response => (this.notifications = response.data))
 			.catch(function (error) {
 				console.log(error);
@@ -48,20 +48,29 @@ export default {
 	methods: {
 	    showComponent() {
 	        this.show ? this.show = false : this.show = true;
-			var arraySort = require('array-sort');
-	        arraySort(this.notifications, 'timestamp');
+			this.notifications.sort((a,b)=>{
+				return a - b
+})
 	    },
 	},
 	computed:{
 
 		getDate(){
 			for (var i = 0; i < this.notifications.length; i++) {
-				var time =	moment(this.notifications[i].timestamp).format(' h:mm:ss a');
+				var time =	moment(this.notifications[i].timestamp,'X').format(' h:mm:ss a');
 				console.log(time)
 				 return time
 			}
 	
-		}
+		},
+		// formatTime(){
+		// 	var formatedArray = this.notifications;
+		// 	formatedArray.forEach((notification,key)=>{
+		// 		formatedArray[key].dateTime = this.moment(this.notifications)
+		// 		//add x to moment timestamp 
+
+		// 	})
+		// }
 	}
 }
 </script>
