@@ -41,7 +41,8 @@ export default {
 			this.notifications.sort((a,b)=>{
 				return a - b
 			})
-		}, 	formatDates() {
+		},
+		formatDates() {
 			var formattedArray = this.notifications;
 			formattedArray.forEach((notification, key) => {
 				formattedArray[key].dateTime = this.moment(this.notifications[key].timestamp, 'X')
