@@ -2,7 +2,7 @@
    <div class="notifications">
       <h1 @click.prevent="showComponent()" >Notifications</h1>
 
-         <div  v-if="show"  v-for="item in formatDates()"
+         <div  v-if="show" v-for="item in formatDates()"
             v-bind:item="item"
             v-bind:key="item.id"
             class="single-notification"
@@ -15,8 +15,8 @@
    </div>
 </template>
 <script>
-   import axios from 'axios';
-   import moment from 'moment';
+  
+
    
    
 export default {
@@ -27,34 +27,26 @@ export default {
 			notifications: [],
 			timestamps: [],
 			show: false,
-			isSeen:false,
+
 }
     
 	},
 	mounted() {
-		axios.get('http://api.myjson.com/bins/19wyhe')
+		this.axios.get('http://api.myjson.com/bins/19wyhe')
 			.then(response => (this.notifications = response.data))
-			.catch(function (error) {
-				console.log(error);
-			})
-
-
 	},
 	methods: {
-	    showComponent() {
-	        this.show ? this.show = false : this.show = true;
+		showComponent() {
+			this.show ? this.show = false : this.show = true;
 			this.notifications.sort((a,b)=>{
 				return a - b
-})
-	    }, 	formatDates() {
+			})
+		}, 	formatDates() {
 			var formattedArray = this.notifications;
 			formattedArray.forEach((notification, key) => {
 				formattedArray[key].dateTime = this.moment(this.notifications[key].timestamp, 'X')
 					.format('MMMM Do YYYY, h:mm:ss a');
 
-			if(formattedArray[key].seen === true){
-				console.log(formattedArray[key].seen)
-			}							
 			});
 
 			return formattedArray;
@@ -87,10 +79,9 @@ export default {
 		padding: 5px 10px;
 		
 		&:hover{
-			background-color: #235789;
+			background-color: #5879ad;
 			color:#FDFFFC;
 			font-weight: bolder;
-			
 		}
 		img{
 			height:30px;
@@ -98,6 +89,13 @@ export default {
 		p{
 			// margin:0;
 			font-size: 15px;
+		}
+	}
+
+	.active{
+		background-color: #efefef;
+		&:hover{
+				background-color: #235787;
 		}
 	}
 }
