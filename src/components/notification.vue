@@ -2,38 +2,33 @@
    <div class="notifications">
       <h1 @click.prevent="showComponent()" >Notifications</h1>
 
-         <div  v-if="show"  v-for="item in notifications"
+         <div  v-if="show"  v-for="item in formatDates()"
             v-bind:item="item"
             v-bind:key="item.id"
             class="single-notification"
-            :class="{ 'active':(isSeen)  }">
+            :class="{ 'active':item.seen  }">
             <img v-bind:src="item.icon"  alt=""> 
             <p>{{item.message}}</p>
-            <p>{{getDate}}</p>
+            <p>{{item.dateTime}}</p>
          </div>
 
    </div>
 </template>
 <script>
    import axios from 'axios';
-   import moment,{ isDuration } from 'moment';
+   import moment from 'moment';
    
    
 export default {
-	name: 'HelloWorld',
-	props: {
-		msg: String,
+	name: 'notification',
 
-	},
 	data() {
 		return {
 			notifications: [],
 			timestamps: [],
 			show: false,
 			isSeen:false,
-
- 
-    }
+}
     
 	},
 	mounted() {
@@ -51,34 +46,27 @@ export default {
 			this.notifications.sort((a,b)=>{
 				return a - b
 })
-	    },
-	},
-	computed:{
+	    }, 	formatDates() {
+			var formattedArray = this.notifications;
+			formattedArray.forEach((notification, key) => {
+				formattedArray[key].dateTime = this.moment(this.notifications[key].timestamp, 'X')
+					.format('MMMM Do YYYY, h:mm:ss a');
 
-		getDate(){
-			for (var i = 0; i < this.notifications.length; i++) {
-				var time =	moment(this.notifications[i].timestamp,'X').format(' h:mm:ss a');
-				console.log(time)
-				 return time
-			}
-	
-		},
-		// formatTime(){
-		// 	var formatedArray = this.notifications;
-		// 	formatedArray.forEach((notification,key)=>{
-		// 		formatedArray[key].dateTime = this.moment(this.notifications)
-		// 		//add x to moment timestamp 
+			if(formattedArray[key].seen === true){
+				console.log(formattedArray[key].seen)
+			}							
+			});
 
-		// 	})
-		// }
+			return formattedArray;
+		}
 	}
-}
+	}
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped   lang='scss'>
 .notifications{
 	margin:0 auto;
-	max-width:550px;
+	max-width:700px;
 	background-color: #FDFFFC;
 	padding-top: 0;
 	cursor:pointer;	
